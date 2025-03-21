@@ -1,0 +1,9 @@
+.whiteboardContainer {
+    position: relative;
+    width: 99.3vw;
+    height: 85vh;
+}
+
+.whiteboard {
+    width: 100%;
+}

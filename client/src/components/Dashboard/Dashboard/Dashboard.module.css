@@ -1,0 +1,118 @@
+.dashboardContainer {
+    padding: 40px;
+    font-family: 'Inter', sans-serif;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.dashboardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.dashboardHeader h1 {
+    font-size: 2.5rem;
+    color: #2c3e50;
+    font-weight: 700;
+}
+
+.headerActions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.searchInput {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    width: 250px;
+    transition: border-color 0.3s;
+}
+
+.searchInput:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+.filterDropdown {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: white;
+    cursor: pointer;
+    transition: border-color 0.3s;
+}
+
+.filterDropdown:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+.createButton {
+    background-color: #3498db;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.createButton:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+.boardList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    width: 95vw;
+}
+
+.loadingContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+}
+
+.spinner {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 10px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.noBoards {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #7f8c8d;
+    margin-top: 20px;
+}
+
+.loggedInUser {
+    font-size: 1rem;
+    color: #7f8c8d;
+    font-weight: 500;
+}

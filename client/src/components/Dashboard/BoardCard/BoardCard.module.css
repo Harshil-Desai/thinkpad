@@ -1,0 +1,90 @@
+.card {
+    min-width: 300px;
+    width: 22vw;
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+.cardHovered {
+    transform: translateY(-4px);
+    box-shadow: 3;
+}
+
+.thumbnailContainer {
+    position: relative;
+    height: 180px;
+    overflow: hidden;
+}
+
+.thumbnailImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.thumbnailDefault {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+}
+
+.thumbnailDefaultText {
+    color: #1976d2;
+}
+
+.actionsContainer {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    gap: 8px;
+}
+
+.iconButton {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.iconButtonHover {
+    background-color: white;
+}
+
+.iconButtonDeleteHover {
+    background-color: #ef5350;
+    color: white;
+}
+
+.cardContent {
+    height: 1vh;
+    background-color: #a9d3f2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.boardNameContainer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.chip {
+    display: inline-block;
+}
+
+.dialogContent {
+    margin-bottom: 16px;
+}
+
+.collaboratorList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.dialogActions {
+    padding: 16px;
+}

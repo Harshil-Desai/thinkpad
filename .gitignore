@@ -1,0 +1,51 @@
+# General Node.js-related ignores
+node_modules
+.env
+package-lock.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Logs
+logs
+*.log
+logs/*.log
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Ignore compiled and temporary files
+dist
+build
+.cache
+.DS_Store
+.idea/
+.vscode/
+tmp/
+temp/
+
+# Client (React) specific ignores
+client/node_modules
+client/.env.local
+client/.next
+client/out
+client/build
+client/.cache
+client/public/static
+client/coverage
+client/.DS_Store
+
+# Server (Express) specific ignores
+server/node_modules
+server/.env
+server/dist
+server/coverage
+server/.DS_Store
+
+# Other ignores for temporary files, IDE configurations, and OS-specific files
+*.swp
+*.swo
+*.bak
+*.tmp
+Thumbs.db
