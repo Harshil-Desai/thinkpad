@@ -89,9 +89,8 @@ const BoardCard: React.FC<BoardCardProps> = ({
           <img
             src={`http://localhost:5000/uploads${board.thumbnail}`}
             alt={`${board.name} thumbnail`}
-            className={`${styles.thumbnailImage} ${
-              isHovered ? styles.thumbnailHovered : ""
-            }`}
+            className={`${styles.thumbnailImage} ${isHovered ? styles.thumbnailHovered : ""
+              }`}
           />
         ) : (
           <div className={styles.thumbnailDefault}>
@@ -109,7 +108,7 @@ const BoardCard: React.FC<BoardCardProps> = ({
             <IconButton
               size="small"
               className={`${styles.iconButton} ${styles.iconButtonHover}`}
-              onClick={(e) => {
+              onClick={() => {
                 setIsSharing(true);
               }}
             >

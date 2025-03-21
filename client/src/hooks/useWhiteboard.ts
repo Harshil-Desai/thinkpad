@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import { Editor } from "@tldraw/tldraw";
+import { useState } from "react";
 
 const useWhiteboard = () => {
     const [currentTool, setCurrentTool] = useState('pen');

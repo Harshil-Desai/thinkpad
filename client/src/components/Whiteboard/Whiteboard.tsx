@@ -18,7 +18,7 @@ const Whiteboard: React.FC = () => {
   const { boardId } = useParams<{ boardId: string }>();
   const [boardData, setBoardData]: any = useState(null);
   const socketRef = useRef<WebSocket | null>(null);
-  const [isInitializing, setIsInitializing] = useState(true);
+  // const [isInitializing, setIsInitializing] = useState(true);
   // Fetch board data
   const fetchBoard = async () => {
     try {
@@ -31,7 +31,7 @@ const Whiteboard: React.FC = () => {
         editor.loadSnapshot(snapshot);
       }
 
-      setIsInitializing(false);
+      // setIsInitializing(false);
     } catch (err) {
       console.error("Failed to fetch board:", err);
     }
