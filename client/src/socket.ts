@@ -1,6 +1,6 @@
 import { Socket, io } from "socket.io-client";
 
-const URL = "http://localhost:5000"
+const URL = process.env.BASE_URL
 
 export const socket: Socket = io(URL, {
     autoConnect: false

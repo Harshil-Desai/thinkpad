@@ -41,7 +41,7 @@ const Whiteboard: React.FC = () => {
   const handleMount = useCallback((editorInstance: Editor) => {
     setEditor(editorInstance);
 
-    const socket = new WebSocket(`ws://localhost:5000`);
+    const socket = new WebSocket(`${process.env.REACT_APP_WS_URL || "ws://localhost:5000"}`);
     socket.onopen = () => {
       console.log("Connected to WebSocket");
     };

@@ -87,7 +87,7 @@ const BoardCard: React.FC<BoardCardProps> = ({
       <div className={styles.thumbnailContainer}>
         {board.thumbnail ? (
           <img
-            src={`http://localhost:5000/uploads${board.thumbnail}`}
+            src={`${process.env.BASE_URL}/uploads${board.thumbnail}`}
             alt={`${board.name} thumbnail`}
             className={`${styles.thumbnailImage} ${isHovered ? styles.thumbnailHovered : ""
               }`}
