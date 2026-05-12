@@ -4,10 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm-run-all --parallel start-client start-server",
-    "start-client": "cd client && npm run dev",
-    "start-server": "cd server && npm run watch"
+    "dev": "npm-run-all --parallel dev:client dev:server",
+    "dev:client": "cd client && npm run dev",
+    "dev:server": "cd server && npm run watch",
+    "build": "cd client && npm run build && cd ../server && npm run build",
+    "start": "set NODE_ENV=production && node server/dist/server.js"
   },
   "keywords": [],
   "author": "",

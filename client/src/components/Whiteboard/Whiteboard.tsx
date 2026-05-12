@@ -41,7 +41,7 @@ const Whiteboard: React.FC = () => {
   const handleMount = useCallback((editorInstance: Editor) => {
     setEditor(editorInstance);
 
-    const socket = new WebSocket(`${process.env.REACT_APP_WS_URL || "ws://localhost:5000"}`);
+    const socket = new WebSocket(`${import.meta.env.VITE_WS_URL || "ws://localhost:5000"}`);
     socket.onopen = () => {
       console.log("Connected to WebSocket");
     };
@@ -77,55 +77,47 @@ const Whiteboard: React.FC = () => {
     };
   }, []);
 
-  // Save the canvas as an image and upload it to the server
   const saveCanvasAsImage = async () => {
     if (!editor) return;
 
+    // Skip thumbnail generation for empty boards
+    const shapes = editor.getCurrentPageShapes();
+    if (shapes.length === 0) return;
+
     let shapeIds = editor.getCurrentPageShapeIds();
-    if (shapeIds.size !== 0) {
-      const blob = await exportToBlob({
-        editor: editor,
-        ids: [...shapeIds],
-        format: "png",
-        opts: { background: false },
-      });
-      // Convert blob to base64
-      const reader = new FileReader();
-      reader.readAsDataURL(blob);
-      reader.onloadend = async () => {
-        const base64data = reader.result;
+    const blob = await exportToBlob({
+      editor: editor,
+      ids: [...shapeIds],
+      format: "png",
+      opts: { background: false },
+    });
+    // Convert blob to base64
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onloadend = async () => {
+      const base64data = reader.result;
 
-        try {
-          const token = localStorage.getItem("token");
-          const response = await axios.post(
-            `/api/boards/${boardId}/thumbnail`,
-            { image: base64data },
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.post(
+          `/api/boards/${boardId}/thumbnail`,
+          { image: base64data },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
 
-          // Update the board's thumbnail URL in the database
-          const thumbnailUrl = response.data.thumbnailUrl;
-          await axios.put(
-            `/api/boards/${boardId}`,
-            { thumbnail: thumbnailUrl },
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
+        // Update the board's thumbnail URL in the database
+        const thumbnailUrl = response.data.thumbnailUrl;
+        await axios.put(
+          `/api/boards/${boardId}`,
+          { thumbnail: thumbnailUrl },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
 
-          console.log("Thumbnail saved:", thumbnailUrl);
-        } catch (err) {
-          console.error("Failed to save thumbnail:", err);
-        }
-      };
-    } else {
-      const token = localStorage.getItem("token");
-      const thumbnailUrl = "../../uploads/thumbnail_whitebackground.png";
-      await axios.put(
-        `/api/boards/${boardId}`,
-        { thumbnail: thumbnailUrl },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      console.log("Thumbnail saved:", thumbnailUrl);
-    }
+        console.log("Thumbnail saved:", thumbnailUrl);
+      } catch (err) {
+        console.error("Failed to save thumbnail:", err);
+      }
+    };
   };
 
   // Save the canvas periodically (e.g., every 10 seconds)
@@ -223,7 +215,7 @@ const Whiteboard: React.FC = () => {
       {boardData ? (
         <>
           <h2>{boardData.name}</h2>
-          <p>Shared With: {boardData.sharedWith.join(", ")}</p>
+          <p>Shared With: {boardData.sharedWith.map((u: any) => u.username || u).join(", ")}</p>
           <Tldraw onMount={handleMount} persistenceKey={boardId}></Tldraw>
         </>
       ) : (

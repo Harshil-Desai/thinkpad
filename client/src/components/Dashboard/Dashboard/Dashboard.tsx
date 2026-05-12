@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import BoardCard from "../BoardCard/BoardCard";
 import styles from "./Dashboard.module.css";
 import useDebounce from "../../../hooks/useDebounce";
@@ -10,6 +11,7 @@ const Dashboard: React.FC = () => {
   const [userName, setUserName] = useState<string | null>("");
   const [searchQuery, setSearchQuery] = useState("");
   const [filter, setFilter] = useState("all");
+  const navigate = useNavigate();
 
   const fetchBoards = async () => {
     const token = localStorage.getItem("token");
@@ -41,15 +43,11 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  const debouncedFetchUserName = useDebounce(fetchUserName);
+
   useEffect(() => {
     fetchBoards();
-    debouncedFn();
-    debouncedFn();
-    debouncedFn();
-    debouncedFn();
-    debouncedFn();
-    debouncedFn();
-    debouncedFn();
+    debouncedFetchUserName();
   }, []);
 
   const handleCreateBoard = async () => {
@@ -132,7 +130,6 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const debouncedFn = useDebounce(fetchUserName);
 
   return (
     <div className={styles.dashboardContainer}>
@@ -175,7 +172,7 @@ const Dashboard: React.FC = () => {
               <BoardCard
                 key={board._id}
                 board={board}
-                onClick={() => (window.location.href = `/boards/${board._id}`)}
+                onClick={() => navigate(`/boards/${board._id}`)}
                 onDelete={handleDeleteBoard}
                 onRename={handleRenameBoard}
                 onAddCollaborator={handleAddCollaborator}

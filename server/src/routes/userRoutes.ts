@@ -2,6 +2,15 @@ import express from "express"
 import User from "../models/User";
 import jwt from 'jsonwebtoken'
 import bcrypt from "bcrypt"
+import rateLimit from 'express-rate-limit'
+
+const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 20,
+    message: { error: 'Too many requests, please try again later.' },
+    standardHeaders: true,
+    legacyHeaders: false,
+});
 
 const router = express.Router()
 
@@ -9,7 +18,7 @@ router.get('/test', (req, res) => {
     res.send('Test route is working');
 });
 
-router.post('/register', async (req, res) => {
+router.post('/register', authLimiter, async (req, res) => {
     try {
         const { username, email, password } = req.body;
         const user = new User({
@@ -18,16 +27,19 @@ router.post('/register', async (req, res) => {
             password: password
         })
         await user.save()
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET as string, { expiresIn: '1d' })
         res.status(201).json({
             message: "User created successfully",
-            user: user
+            user: user,
+            token,
+            userId: user._id
         })
     } catch (error) {
         res.status(500).json({ message: `Something wend wrong: ${error}` })
     }
 })
 
-router.post('/login', async (req, res) => {
+router.post('/login', authLimiter, async (req, res) => {
     const { email, password } = req.body;
     try {
         const user = await User.findOne({ email });

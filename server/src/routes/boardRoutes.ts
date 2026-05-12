@@ -7,6 +7,7 @@ import { saveImageToStorage } from "../app";
 import { error } from "console";
 import sharp from "sharp";
 import { compressImage } from "../utils/utils";
+import { authenticate } from "../middlewares/auth";
 
 const fs = require("fs")
 const upload = multer({
@@ -24,10 +25,10 @@ const upload = multer({
 
 const router = express.Router();
 
-router.post("/", async (req: any, res) => {
-    const { name, canvasData, createdBy } = req.body;
+router.post("/", authenticate, async (req: any, res) => {
     try {
-        const board = await Board.create(req.body)
+        const boardData = { ...req.body, createdBy: req.user._id };
+        const board = await Board.create(boardData)
         res.status(201).json({
             message: "Board created successfully",
             data: board
@@ -40,9 +41,15 @@ router.post("/", async (req: any, res) => {
     }
 })
 
-router.get("/", async (req, res) => {
+router.get("/", authenticate, async (req: any, res) => {
     try {
-        const boards = await Board.find();
+        const userId = req.user._id;
+        const boards = await Board.find({
+            $or: [
+                { createdBy: userId },
+                { sharedWith: userId }
+            ]
+        });
         res.status(200).json(boards)
     }
     catch (err) {
@@ -55,11 +62,12 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
     try {
-        const board = await Board.findById(req.params.id)
-        if (!board)
-            res.status(404).json({
+        const board = await Board.findById(req.params.id).populate('sharedWith', 'username')
+        if (!board) {
+            return res.status(404).json({
                 message: "Board not found"
             })
+        }
         res.status(200).json(board)
     }
     catch (err) {
@@ -83,10 +91,17 @@ router.put("/:id", async (req, res) => {
     }
 })
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", authenticate, async (req: any, res) => {
     try {
+        const board = await Board.findById(req.params.id);
+        if (!board) {
+            return res.status(404).json({ message: "Board not found" })
+        }
+        if (board.createdBy.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ message: "Forbidden: you do not own this board" })
+        }
         await Board.findByIdAndDelete(req.params.id);
-        res.status(200).json({ message: "Board deleteed successfully" })
+        res.status(200).json({ message: "Board deleted successfully" })
     }
     catch (err) {
         res.status(500).json({
@@ -101,7 +116,7 @@ router.put("/share/:id", async (req, res) => {
     try {
         const board = await Board.findById(req.params.id);
         if (!board) {
-            res.status(404).json({
+            return res.status(404).json({
                 message: "Board not found"
             })
         }
@@ -109,12 +124,12 @@ router.put("/share/:id", async (req, res) => {
         const users = await User.find({ email: { $in: sharedWith } }, '_id')
         const userIds = users.map((e) => e._id)
 
-        userIds.forEach(async (element: any) => {
-            if (!board?.sharedWith.includes(element)) {
-                board?.sharedWith.push(element);
+        for (const userId of userIds) {
+            if (!board.sharedWith.includes(userId as any)) {
+                board.sharedWith.push(userId as any);
             }
-        });
-        await board?.save()
+        }
+        await board.save()
 
         res.status(200).json({
             message: "Board shared successfully",

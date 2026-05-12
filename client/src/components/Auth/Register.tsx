@@ -18,9 +18,13 @@ const Register = () => {
         email,
         password,
       });
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("userId", response.data.user._id);
-      navigate("/dashboard");
+      if (response.data.token && response.data.userId) {
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("userId", response.data.userId);
+        navigate("/dashboard");
+      } else {
+        console.error("Registration response missing token or userId");
+      }
     } catch (err) {
       console.error("Registration failed", err);
     }

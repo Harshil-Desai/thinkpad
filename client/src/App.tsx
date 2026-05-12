@@ -1,3 +1,4 @@
+import './api/axiosConfig'; // Register axios interceptors (401 redirect)
 import './App.css'
 import { WhiteboardProvider } from './components/Context/WhiteboardContext';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';

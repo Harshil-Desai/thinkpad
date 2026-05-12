@@ -87,7 +87,7 @@ const BoardCard: React.FC<BoardCardProps> = ({
       <div className={styles.thumbnailContainer}>
         {board.thumbnail ? (
           <img
-            src={`${process.env.BASE_URL}/uploads${board.thumbnail}`}
+            src={`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${board.thumbnail}`}
             alt={`${board.name} thumbnail`}
             className={`${styles.thumbnailImage} ${isHovered ? styles.thumbnailHovered : ""
               }`}
